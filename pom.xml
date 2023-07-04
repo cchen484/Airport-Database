@@ -6,4 +6,15 @@
   <version>1.0-SNAPSHOT</version>
   <name>Archetype - Airport-Solvd</name>
   <url>http://maven.apache.org</url>
+  <properties>
+    <maven.compiler.source>17</maven.compiler.source>
+    <maven.compiler.target>17</maven.compiler.target>
+  </properties>
+  <dependencies>
+    <dependency>
+      <groupId>log4j</groupId>
+      <artifactId>log4j</artifactId>
+      <version>1.2.12</version>
+    </dependency>
+  </dependencies>
 </project>

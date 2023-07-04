@@ -9,7 +9,7 @@ SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,N
 -- Schema airport-database
 -- -----------------------------------------------------
 CREATE SCHEMA IF NOT EXISTS `airport-database` DEFAULT CHARACTER SET utf8 ;
-USE `airport-database` ;
+USE `airport-database`;
 
 -- -----------------------------------------------------
 -- Table `airport-database`.`Bookings`
@@ -19,11 +19,11 @@ CREATE TABLE IF NOT EXISTS `airport-database`.`Bookings` (
   `booking_name` VARCHAR(100) NOT NULL,
   `email` VARCHAR(200) NOT NULL,
   `airport` VARCHAR(3) NOT NULL,
-  PRIMARY KEY (`booking_id`);
+  PRIMARY KEY (`booking_id`));
   INSERT INTO Bookings (booking_name, email, airport) VALUES ('Arthur Benson', 'artben@hotmail.com', 'LAX');
   INSERT INTO Bookings (booking_name, email, airport) VALUES ('Arthur Benson', 'artben@hotmail.com', 'LAG');
-  INSERT INTO Bookings (booking_name, email, airport) VALUES ('Zora Lee', 'zoraly@gmail.com' 'JFK');
-  INSERT INTO Bookings (booking_name, email, airport) VALUES ('Jason Paterson', 'jaypat99@comcast.net');
+  INSERT INTO Bookings (booking_name, email, airport) VALUES ('Zora Lee', 'zoraly@gmail.com', 'JFK');
+  INSERT INTO Bookings (booking_name, email, airport) VALUES ('Jason Paterson', 'jaypat99@comcast.net', 'JFK');
   INSERT INTO Bookings (booking_name, email, airport) VALUES ('Jennie Kenneth', 'jenniekennie@gmail.com','JFK');
   INSERT INTO Bookings (booking_name, email, airport) VALUES ('Arthur Benson', 'artben@hotmail.com', 'DEN');
   INSERT INTO Bookings (booking_name, email, airport) VALUES ('Octavia Jennings', 'octjenn545@gmail.com', 'ATL');
@@ -32,20 +32,20 @@ CREATE TABLE IF NOT EXISTS `airport-database`.`Bookings` (
 -- GROUP BY, W/ HAVING
 SELECT COUNT(Bookings.booking_id)
 FROM Bookings
-GROUP BY Customers.airport
+GROUP BY Bookings.airport
 HAVING COUNT(Bookings.booking_id)>3;
 
 -- GROUP BY, W/O HAVING
 SELECT COUNT(Bookings.booking_name)
 FROM Bookings
-GROUP BY Customers.airport;
+GROUP BY Bookings.airport;
 
   
-UPDATE Customers
+UPDATE Bookings
 SET booking_name = 'Art Benson'
-WHERE email = 'artben@hotmail.com';
+WHERE email = 'artben@hotmail.com' AND airport = 'DEN';
 
-UPDATE Customers
+UPDATE Bookings
 SET email = 'jasonpat99@xfinity.net'
 WHERE booking_name = 'Jason Paterson';
 
