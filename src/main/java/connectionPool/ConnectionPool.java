@@ -18,80 +18,89 @@ public class ConnectionPool {
     private static final Logger loggerJDBC = LogManager.getLogger(ConnectionPool.class);
 
     //KEYS FOR DATABASE PROPERTIES FILE
-    private static final String PROP_FILE = "database.properties";
-    private static final String DB_URL = "database.url";
-    private static final String DB_UNAME = "database.username";
-    private static final String DB_PW = "database.password";
+    private static String DB_URL;
+    private static String DB_UNAME;
+    private static String DB_PW;
 
     private static boolean GENERATED = false;
     private static BasicDataSource database;
 
-    //GENERATE CONNECTION POOL BASED ON BASICDATASOURCE
+    //Generate Connection Pool built on BasicDataSource
     public static void generateConnectionPool(){
+
         if(!GENERATED) {
-            database = new BasicDataSource();
-            Properties dbProp = new Properties();
-
-            try(InputStream input = ConnectionPool.class.getClassLoader().getResourceAsStream(PROP_FILE)) {
-                if(input == null) {
-                    loggerJDBC.error("No properties included properties file.");
-                } else {
-                    dbProp.load(input);
-
-                    //INITIALIZE DATABASE WITH PROPERTIES FROM PROPERTIES FILE
-                    database.setUrl(dbProp.getProperty(DB_URL));
-                    database.setUsername(dbProp.getProperty(DB_UNAME));
-                    database.setPassword(dbProp.getProperty(DB_PW));
-
-                    database.setMinIdle(5);
-                    database.setMaxIdle(10);
-                    database.setMaxOpenPreparedStatements(100);
-                }
-
-            } catch(IOException ioe) {
-                ioe.printStackTrace();
-                loggerJDBC.error("There was an IOException");
-            }
-
+            ConnectionPool.loadProperties();
+            ConnectionPool.initializeDatabase();
+            GENERATED = true; 
         } else {
-            loggerJDBC.info("Connection pool already generated.");
+            loggerJDBC.info("A connection pool has already been generated.");
         }
 
     }
+
+    private static void loadProperties() {
+        Properties dbProp = new Properties();
+
+        try(InputStream input = ConnectionPool.class.getClassLoader().getResourceAsStream("database.properties")) {
+            if(input == null) {
+                loggerJDBC.error("No properties included properties file.");
+            } else {
+                dbProp.load(input);
+
+                DB_URL = dbProp.getProperty("database.url");
+                DB_UNAME = dbProp.getProperty("database.username");
+                DB_PW = dbProp.getProperty("database.password");
+
+            }
+        } catch(IOException ioe) {
+            ioe.printStackTrace();
+            loggerJDBC.error("There was an IOException with reading the resource");
+        }
+    }
+
+    //Initialize database with properties from properties file
+    private static void initializeDatabase() {
+        database = new BasicDataSource();
+
+        database.setUrl(DB_URL);
+        database.setUsername(DB_UNAME);
+        database.setPassword(DB_PW);
+
+        database.setMinIdle(5);
+        database.setMaxIdle(10);
+        database.setMaxOpenPreparedStatements(100);
+
+    }
+
 
     public static Connection getConnection() throws SQLException {
         Connection conn;
         if(GENERATED) {
             conn = database.getConnection();
         } else {
-            loggerJDBC.info("Connection pool is not generated yet.");
+            loggerJDBC.info("Connection pool is not yet generated.");
             conn = null;
         }
         return conn;
     }
-    
 
-    public static void main(String[] args){
+    public static void releaseConnection(Connection conn) {
 
+    }
+
+    public static void closeConnection(Connection conn) throws SQLException {
         try {
-            Class.forName("com.mysql.jdbc.Driver");
-        } catch(ClassNotFoundException e) {
-            e.printStackTrace();
-            loggerJDBC.error("No JDBC driver found");
-        }
-
-        Connection conn = null;
-        try {
-            String query = "SELECT * FROM CUSTOMERS";
-            Statement statement = conn.createStatement();
-            ResultSet resultSet = statement.executeQuery(query);
-
-            while(resultSet.next()) {
-                System.out.println(resultSet.getString("booking_name"));
+            if(GENERATED && conn != null) {
+                conn.close();
+            } else {
+                loggerJDBC.info("Connection pool is not yet generated.");
             }
         } catch(SQLException se) {
             se.printStackTrace();
+            loggerJDBC.error("Error closing connection to database");
         }
 
     }
+
+
 }
