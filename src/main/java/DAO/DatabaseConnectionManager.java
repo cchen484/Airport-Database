@@ -22,18 +22,12 @@ public class DatabaseConnectionManager {
     private static String DB_URL;
     private static String DB_UNAME;
     private static String DB_PW;
-    private static boolean GENERATED = false;
     private static BasicDataSource database;
 
     //Generate database connection manager built on BasicDataSource
-    public static void generateDBCM(){
-        if(!GENERATED) {
-            loadProperties();
-            initializeDatabase();
-            GENERATED = true;
-        } else {
-            loggerDBCM.info("A database connection manager has already been generated.");
-        }
+    static {
+        loadProperties();
+        initializeDatabase();
     }
 
     //Load database properties from properties file
@@ -72,25 +66,22 @@ public class DatabaseConnectionManager {
     }
 
     //Get connection to access database
-    public static Connection getConnection() throws SQLException {
-        Connection conn;
-        if(GENERATED) {
+    public static Connection getConnection() {
+        Connection conn = null;
+        try {
             conn = database.getConnection();
-        } else {
-            loggerDBCM.info("Connection pool is not yet generated.");
-            conn = null;
+        } catch(SQLException se) {
+            loggerDBCM.error("Error getting connection");
+            se.printStackTrace();
         }
+
         return conn;
     }
 
     //Close connection to database
     public static void closeConnection(Connection conn) throws SQLException {
         try {
-            if(GENERATED && conn != null) {
-                conn.close();
-            } else {
-                loggerDBCM.info("Connection pool is not yet generated.");
-            }
+            conn.close();
         } catch(SQLException se) {
             loggerDBCM.error("Error closing connection to database");
             se.printStackTrace();

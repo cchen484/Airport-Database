@@ -10,10 +10,10 @@ import java.util.Optional;
  * @param <T>
  */
 public interface DAO<T> {
-    T get(long id);
+    T get(int id);
     List<T> getAll();
-    void insert();
+    void insert(T t);
     void update(T t);
-    void delete(T t);
+    void delete(int id);
 
 }
