@@ -1,0 +1,27 @@
+{
+  "flights": [
+    {
+      "flightID": 1,
+      "departureTime": "2023-11-11 13:23:00",
+      "arrivalTime": "2023-11-19 1:40:00",
+      "departureAirportFAA": "CLT",
+      "arrivalAirportFAA": "LAX"
+    },
+
+    {
+      "flightID": 2,
+      "departureTime": "2023-11-09 15:45:00",
+      "arrivalTime": "2023-11-27 2:55:00",
+      "departureAirportFAA": "ATL",
+      "arrivalAirportFAA": "JFK"
+    },
+
+    {
+      "flightID": 3,
+      "departureTime": "2023-10-29 14:56:00",
+      "arrivalTime": "2023-11-01 18:24:00",
+      "departureAirportFAA": "BHM",
+      "arrivalAirportFAA": "MRI"
+    }
+  ]
+}

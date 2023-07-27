@@ -7,12 +7,14 @@ import javax.xml.bind.Unmarshaller;
 import java.io.File;
 
 public class XmlJaxbParser {
+    //Unmarshal XML files into Java
     public static <T> T unmarshalXml(File file, Class<T> classXml) throws JAXBException {
         JAXBContext context = JAXBContext.newInstance(classXml);
         Unmarshaller unmarshaller = context.createUnmarshaller();
         return classXml.cast(unmarshaller.unmarshal(file));
     }
 
+    //Marshal Java objects into XML
     public static <T> void marshalXml(File file, T object) throws JAXBException{
         JAXBContext context = JAXBContext.newInstance(object.getClass());
         Marshaller marshaller = context.createMarshaller();
