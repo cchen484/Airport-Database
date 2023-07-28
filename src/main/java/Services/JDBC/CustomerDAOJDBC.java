@@ -1,8 +1,9 @@
-package DAO.JDBC;
+package Services.JDBC;
 
 import DAO.DatabaseConnectionManager;
 import DAO.Interfaces.CustomerDAO;
 import Models.Customer;
+import com.sun.tools.javac.Main;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -10,14 +11,11 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.List;
 import java.util.ArrayList;
-
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import java.util.List;
 
 public class CustomerDAOJDBC implements CustomerDAO{
-    private static final Logger loggerCDAO = LogManager.getLogger(CustomerDAOJDBC.class);
+    private static final Logger loggerCDAO = LogManager.getLogger(Main.class);
 
     public CustomerDAOJDBC() { }
 
